@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shaking Tokyo | Cards</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root{ --red:#ab1e22; }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0; background:#000; color:#fff;
+      font-family:"Noto Sans KR",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+      min-height:100vh;
+    }
+    main{ display:flex; flex-direction:column; gap:40px; padding:40px 16px; width:100%; max-width:900px; }
+
+    /* === per-letter 흔들림: 이전과 동일한 패턴 === */
+    h1#title{
+      margin:0 auto 16px; font-size:2.2rem; letter-spacing:.5px; color:var(--red);
+      font-family:"IBM Plex Mono",monospace; font-weight:700; text-transform:lowercase;
+      user-select:none; text-align:center;
+      text-shadow:0 4px 8px rgba(171,30,34,0.35);
+    }
+    #title .ch{ display:inline-block; will-change: transform; transform-origin:center bottom; }
+    @keyframes shakeLetterVerticalSlow {
+      0%,100% { transform: translateY(0) rotate(0deg) }
+      10% { transform: translateY(-3px) rotate(-2deg) }
+      20% { transform: translateY(3px) rotate(2deg) }
+      30% { transform: translateY(-2px) rotate(-1.5deg) }
+      40% { transform: translateY(2px) rotate(1.5deg) }
+      50% { transform: translateY(-1.5px) rotate(-1deg) }
+      60% { transform: translateY(1.5px) rotate(1deg) }
+      70% { transform: translateY(-1px) rotate(-0.8deg) }
+      80% { transform: translateY(1px) rotate(0.8deg) }
+      90% { transform: translateY(0) rotate(0.3deg) }
+    }
+    /* 무한 반복 + 글자마다 지연(예전 그대로) */
+    #title.wobble .ch{ animation: shakeLetterVerticalSlow 3.8s ease-in-out infinite; animation-delay: calc(var(--i) * 80ms); }
+    @media (prefers-reduced-motion: reduce){ #title.wobble .ch{ animation: none !important; } }
+
+    /* 영상(로컬 mp4) */
+    video{ width:100%; height:auto; border-radius:12px; margin-bottom:4px; background:#000; }
+
+    .menu-item{
+      position:relative; border:1px solid rgba(255,255,255,0.12);
+      padding:24px; border-radius:12px; background:rgba(255,255,255,0.05);
+      overflow:hidden; transition: transform .25s ease, background .25s ease, border-color .25s ease;
+    }
+    .menu-item:hover{ transform: translateY(-2px); background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.18); }
+
+    .menu-item img{ width:100%; height:auto; border-radius:8px; margin-bottom:16px; display:block; background:#0a0a0a; }
+
+    .row-top{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; }
+    .name{ font-size:1.34rem; font-weight:700; color:var(--red); }
+
+    .lang-tag{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:22px; height:22px; line-height:22px; border-radius:50%;
+      background:rgba(255,255,255,0.25); color:#eee; font-size:.65rem; font-weight:600;
+      margin-right:6px; text-transform:uppercase; flex-shrink:0;
+    }
+    .trans{ margin:6px 0 0; font-size:.98rem; line-height:1.6; opacity:.95; }
+    .desc{ font-size:1rem; line-height:1.6; margin-top:10px; }
+
+    .act{
+      background:#111; color:#fff; border:1px solid #333; border-radius:8px;
+      padding:6px 10px; font-size:.92rem; cursor:pointer;
+      transition:transform .12s ease, background .2s ease, border-color .2s ease, opacity .2s ease;
+    }
+    .act:hover{ transform: translateY(-1px); }
+    .act:active{ transform: translateY(0); opacity:.95; }
+    .act:focus-visible{ outline:2px solid var(--red); outline-offset:2px; }
+
+    /* 반응형 */
+    @media (max-width:900px){
+      body{ font-size:15px; }
+      main{ gap:28px; }
+      h1#title{ font-size:1.9rem; }
+    }
+    @media (max-width:600px){
+      h1#title{ font-size:1.6rem; }
+      .menu-item{ padding:18px; }
+      .act{ font-size:.9rem; padding:6px 10px; }
+      .trans{ font-size:.94rem; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <!-- 흔들리는 타이틀 -->
+    <h1 id="title">shaking tokyo!</h1>
+
+    <!-- 로컬 비디오 (YouTube 대체) -->
+    <video controls autoplay muted playsinline loop>
+      <source src="videoplayback.mp4" type="video/mp4">
+      브라우저가 video 태그를 지원하지 않습니다.
+    </video>
+
+    <!-- 1. 나는 히키코모리다 -->
+    <article class="menu-item"
+      data-ko="나는 히키코모리다."
+      data-en="I am a hikikomori."
+      data-ja="私は引きこもりです。">
+      <img src="scene-hikikomori.png" alt="나는 히키코모리다 이미지">
+      <div class="row-top">
+        <span class="name"></span>
+        <div class="row-actions"><button class="act" data-speak>Speak</button></div>
+      </div>
+      <p class="trans trans-1"></p>
+      <p class="trans trans-2"></p>
+      <p class="desc">For ten years, life has quietly unfolded within narrow walls, where days blur into one another. The room replaces the world; the books my company. What once was a condition slowly becomes an identity that fills every corner.</p>
+    </article>
+
+    <!-- 2. 이것이 사라지기 전까지 10년 -->
+    <article class="menu-item"
+      data-ko="이것이 사라지기 전까지 10년."
+      data-en="Ten years until this disappears."
+      data-ja="これが消えるまでの10年。">
+      <img src="scene-10years.png" alt="이것이 사라지기 전까지 10년 이미지">
+      <div class="row-top">
+        <span class="name"></span>
+        <div class="row-actions"><button class="act" data-speak>Speak</button></div>
+      </div>
+      <p class="trans trans-1"></p>
+      <p class="trans trans-2"></p>
+      <p class="desc">Ten years pass in silence, and the boundaries of the room dissolve into the mind itself. The stillness grows, marking time only through the dust that falls.</p>
+    </article>
+
+    <!-- 3. 매주 토요일에는 피자를 먹는다 -->
+    <article class="menu-item"
+      data-ko="매주 토요일에는 피자를 먹는다."
+      data-en="Every Saturday, I eat pizza."
+      data-ja="毎週土曜日はピザを食べる。">
+      <img src="scene-pizza.png" alt="매주 토요일에는 피자를 먹는다 이미지">
+      <div class="row-top">
+        <span class="name"></span>
+        <div class="row-actions"><button class="act" data-speak>Speak</button></div>
+      </div>
+      <p class="trans trans-1"></p>
+      <p class="trans trans-2"></p>
+      <p class="desc">The week gains rhythm; a door opens, a box changes hands, and routine takes the place of talk. Saturday becomes a ritual.</p>
+    </article>
+
+    <!-- 4. 사물이 사람을 대체한다 -->
+    <article class="menu-item"
+      data-ko="사물이 사람을 대체한다."
+      data-en="Objects replace people."
+      data-ja="物が人を置き換える。">
+      <img src="scene-objects.png" alt="사물이 사람을 대체한다 이미지">
+      <div class="row-top">
+        <span class="name"></span>
+        <div class="row-actions"><button class="act" data-speak>Speak</button></div>
+      </div>
+      <p class="trans trans-1"></p>
+      <p class="trans trans-2"></p>
+      <p class="desc">Letters without names stand where conversation might. Minimal things promise freedom, but often perform a quiet imprisonment.</p>
+    </article>
+
+    <!-- 5. 11년 만에 눈이 마주쳤다 -->
+    <article class="menu-item"
+      data-ko="11년 만에 눈이 마주쳤다."
+      data-en="Our eyes met for the first time in eleven years."
+      data-ja="11年ぶりに目が合った。">
+      <img src="scene-eyes.png" alt="11년 만에 눈이 마주쳤다 이미지">
+      <div class="row-top">
+        <span class="name"></span>
+        <div class="row-actions"><button class="act" data-speak>Speak</button></div>
+      </div>
+      <p class="trans trans-1"></p>
+      <p class="trans trans-2"></p>
+      <p class="desc">A brief exchange, fragile as breath. After years of silence, a glance weighs more than words.</p>
+    </article>
+
+    <!-- 6. 죄송합니다 실수로 잘못 눌렀어요 -->
+    <article class="menu-item"
+      data-ko="죄송합니다 실수로 잘못 눌렀어요."
+      data-en="Sorry, I pressed it by mistake."
+      data-ja="すみません、間違えて押しました。">
+      <img src="scene-sorry.png" alt="죄송합니다 실수로 잘못 눌렀어요 이미지">
+      <div class="row-top">
+        <span class="name"></span>
+        <div class="row-actions"><button class="act" data-speak>Speak</button></div>
+      </div>
+      <p class="trans trans-1"></p>
+      <p class="trans trans-2"></p>
+      <p class="desc">An apology that replaces explanation; rupture stitched with politeness, a neat label over a messy feeling.</p>
+    </article>
+
+    <!-- 7. 히키코모리가 히키코모리를 만난다 -->
+    <article class="menu-item"
+      data-ko="히키코모리가 히키코모리를 만난다."
+      data-en="A hikikomori meets another hikikomori."
+      data-ja="引きこもりが引きこもりに出会う。">
+      <img src="scene-meet.png" alt="히키코모리가 히키코모리를 만난다 이미지">
+      <div class="row-top">
+        <span class="name"></span>
+        <div class="row-actions"><button class="act" data-speak>Speak</button></div>
+      </div>
+      <p class="trans trans-1"></p>
+      <p class="trans trans-2"></p>
+      <p class="desc">When one recluse meets another, silence mirrors silence, and solitude recognizes itself. A brief reflection of the same world, folded twice.</p>
+    </article>
+  </main>
+
+  <script>
+    /* 타이틀 per-letter 분해 + 흔들림(예전과 동일) */
+    (function(){
+      const t=document.getElementById('title'); const s=t.textContent;
+      t.innerHTML=[...s].map((ch,i)=>`<span class="ch" style="--i:${i}">${ch===' ' ? '&nbsp;' : ch}</span>`).join('');
+      t.classList.add('wobble');
+      t.addEventListener('click', ()=>{ t.classList.remove('wobble'); void t.offsetWidth; t.classList.add('wobble'); });
+    })();
+
+    /* 다국어 순환 + 표기 */
+    const order=['ko','en','ja'];
+    const label={ ko:'KO', en:'EN', ja:'JP' };
+    const langAttr={ ko:'ko-KR', en:'en-US', ja:'ja-JP' };
+
+    function pickText(card, lang){
+      return (card.dataset[lang] || '').trim();
+    }
+    function renderCard(card){
+      const cur=card.dataset.currentLang || 'ko';
+      const name=card.querySelector('.name');
+      const t1=card.querySelector('.trans-1');
+      const t2=card.querySelector('.trans-2');
+      name.textContent = pickText(card, cur);
+      const others=order.filter(l=>l!==cur);
+      const a=others[0], b=others[1];
+      if(t1) t1.innerHTML = `<span class="lang-tag">${label[a]}</span>${pickText(card,a)}`;
+      if(t2) t2.innerHTML = `<span class="lang-tag">${label[b]}</span>${pickText(card,b)}`;
+    }
+    function nextLang(cur){ return order[(order.indexOf(cur)+1)%order.length]; }
+
+    document.querySelectorAll('.menu-item').forEach(card=>{
+      if(!card.dataset.currentLang) card.dataset.currentLang='ko';
+      renderCard(card);
+    });
+
+    /* Web Speech API: 카드별 Speak 누르면 언어 순환 + 해당 언어로 발화 */
+    (function(){
+      const synth=window.speechSynthesis;
+      function getVoiceFor(langCode){
+        const voices=synth.getVoices? synth.getVoices(): [];
+        let v=voices.find(v=> (v.lang||'').toLowerCase()===langCode.toLowerCase());
+        if(v) return v;
+        const base=langCode.split('-')[0];
+        return voices.find(v=> (v.lang||'').toLowerCase().startsWith(base)) || null;
+      }
+      function speak(text, langCode){
+        if(!text) return;
+        const u=new SpeechSynthesisUtterance(text);
+        const v=getVoiceFor(langCode);
+        if(v) u.voice=v;
+        u.lang=langCode; u.rate=1.0; u.pitch=1.0; u.volume=1.0;
+        try{ synth.cancel(); }catch(_){}
+        synth.speak(u);
+      }
+      let resumed=false;
+      function resumeIfNeeded(){ if(!resumed){ try{ synth.resume(); }catch(_){} resumed=true; } }
+      document.addEventListener('click', resumeIfNeeded, { once:true });
+      if('onvoiceschanged' in synth) synth.onvoiceschanged=()=>{};
+
+      document.querySelectorAll('[data-speak]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const card=btn.closest('.menu-item');
+          const cur=card.dataset.currentLang || 'ko';
+          const nxt=nextLang(cur);
+          card.dataset.currentLang=nxt;
+          renderCard(card);
+          speak(pickText(card, nxt), langAttr[nxt]);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
